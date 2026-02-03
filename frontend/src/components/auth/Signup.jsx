@@ -10,6 +10,7 @@ import { USER_API_END_POINT } from "@/utils/constant";
 import { toast } from "sonner";
 import { setLoading } from "@/redux/authSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { Loader2 } from "lucide-react";
 
 
 const Signup = () => {
@@ -19,7 +20,7 @@ const Signup = () => {
     phoneNumber: "",
     password: "",
     role: "",
-    file: "",
+    file: null,
   });
 
   const {loading} = useSelector((store) => store.auth);
@@ -51,12 +52,9 @@ const Signup = () => {
     if(input.file) formData.append("file", input.file);
     try{
       dispatch(setLoading(true));
-        const res = await axios.post(`${USER_API_END_POINT}/register`, formData, {
-            headers: {
-                "Content-Type": "multipart/form-data"
-            },
-            withCredentials: true   
-        });
+        const res = await axios.post(`${USER_API_END_POINT}/register`, formData, 
+            {withCredentials: true}   
+        );   
         if(res.data.success){
             navigate("/login");
             toast.success(res.data.message);
