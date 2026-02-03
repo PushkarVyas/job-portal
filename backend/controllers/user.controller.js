@@ -1,6 +1,8 @@
 import { User } from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import getDataUri from "../utils/datauri.js";
+import cloudinary from "../utils/cloudinary.js";
 
 
 export const register = async (req, res) => {
@@ -153,8 +155,25 @@ export const updateProfile = async (req, res) => {
         if(phoneNumber) user.phoneNumber = phoneNumber;
         if(bio) user.profile.bio = bio;
         if(skills) user.profile.skills = skillsArray;
-        if(file) user.profile.profilePic = file.path;
 
+         if (file) {
+      const fileUri = getDataUri(file);
+
+      const cloudResponse = await cloudinary.uploader.upload(
+        fileUri.content,
+        {
+          resource_type: "raw",   // 🔥 REQUIRED FOR PDF
+          folder: "resumes",
+        }
+      );
+
+        if(cloudResponse){
+            user.profile.resume = cloudResponse.secure_url;
+            user.profile.resumeOriginalName = file.originalname;
+        } 
+        user.profile.resume = cloudResponse.secure_url;
+      user.profile.resumeOriginalName = file.originalname;
+    }
 
 
         await user.save();

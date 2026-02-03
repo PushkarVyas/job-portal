@@ -25,7 +25,7 @@ const UpdateProfileDialog = ( { open, setOpen}) => {
         phoneNumber : user?.phoneNumber,
         bio : user?.profile?.bio,
         skills : user?.profile?.skills?.join(", "),
-        file : user?.profile?.resume
+        file : null
     });
 
     const changeEventHandler = (e) => {
@@ -54,6 +54,7 @@ const UpdateProfileDialog = ( { open, setOpen}) => {
         if(input.file) formData.append("file", input.file);
 
         try{
+            setLoading(true);
             const res = await axios.post(`${USER_API_END_POINT}/updateProfile`, 
                 formData, 
                 {
@@ -67,7 +68,9 @@ const UpdateProfileDialog = ( { open, setOpen}) => {
         }catch(err){
             console.log(err);
             toast.error(err.response.data.message);
-        } 
+        } finally{
+            setLoading(false);
+        }
         setOpen(false);
         
         
