@@ -25,13 +25,13 @@ const CompanyCreate = () => {
             });
             if(res?.data?.success){
                 dispatch(setSingleCompany(res?.data?.company));
-                toast.success(res.data.message);
+                toast.success(res?.data?.message);
                 const companyId = res?.data?.company?._id;
                 navigate(`/admin/companies/${companyId}`);
             } 
         } catch(err) {
             console.log(err);
-            toast.error(err.response.data.message);
+            toast.error(err?.response?.data?.message);
         }
     }
   return (
