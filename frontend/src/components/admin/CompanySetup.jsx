@@ -9,8 +9,11 @@ import { toast } from 'sonner'
 import { COMPANY_API_END_POINT } from '@/utils/constant'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import useGetCompanyById from '@/hooks/useGetCompanyById'
 
 const CompanySetup = () => {
+    const params = useParams();
+    useGetCompanyById(params.id);
     const [input, setInput] = useState({
         name: "",
         description: "",
@@ -22,7 +25,6 @@ const CompanySetup = () => {
     const {singleCompany} = useSelector(store => store.company);
 
     const [loading, setLoading] = useState(false);
-    const params = useParams()
     const navigate = useNavigate();
 
     const changeEventHandler = (e) => {
@@ -60,7 +62,6 @@ const CompanySetup = () => {
                 navigate(`/admin/companies`);
             }
         }catch(err){
-            toast.error(err.response.data.message);
             console.log(err);
         } finally{
             setLoading(false);
