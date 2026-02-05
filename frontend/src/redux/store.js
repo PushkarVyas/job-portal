@@ -25,7 +25,8 @@ const rootReducer = combineReducers({
     job: jobSlice
 })
 
-const persistedReducer = persistReducer(persistConfig, authSlice.reducer)
+const persistedReducer = persistReducer(persistConfig, rootReducer)
+
 
 
 
