@@ -1,6 +1,7 @@
 import { Job } from "../models/job.model.js";
 
 export const postJob = async (req, res) => {
+  
   try {
     const {
       title,
@@ -43,7 +44,7 @@ export const postJob = async (req, res) => {
       jobType,
       position,
       company: companyId,
-      createdBy: userId,
+      created_by: userId,
     });
 
     return res
@@ -99,7 +100,7 @@ export const getJobById = async (req, res) => {
 export const getAdminJobs = async (req, res) => {
   try {
     const adminId = req.id;
-    const jobs = await Job.find({ createdBy: adminId });
+    const jobs = await Job.find({ created_by: adminId }).populate("company").sort({ createdAt: -1 });
     if (!jobs) {
       return res.status(400).json({ message: "No jobs found", success: false });
     }
